@@ -191,7 +191,13 @@ private:
 
     bool isValidPosition(const Position& pos)
     {
-        return true;
+        int i = pos.x/33;
+        int j = pos.y/33;
+
+        return TileMap[i][j] != 'B'
+                && TileMap[i+1][j] != 'B'
+                && TileMap[i][j+1] != 'B'
+                && TileMap[i+1][j+1] != 'B';
     }
 
     Position nextPosition(const Position& pos, float time)
@@ -252,34 +258,6 @@ private:
 
         sprite.setTextureRect(IntRect(33*frame, 198+d*33, 32,32));
     }
-
-//    void collisionX()
-//    {
-
-//        for (int i = rect.top/32 ; i<(rect.top+rect.height)/33; i++)
-//            for (int j = rect.left/32; j<(rect.left+rect.width)/33; j++)
-//                if (TileMap[i][j]=='B')
-//                {
-//                    if (dx>0)
-//                    { rect.left =  j*33 - rect.width;dx*=-1; }
-//                    else if (dx<0)
-//                    { rect.left =  j*33 + 32.9;  dx*=-1; }
-//                }
-//    }
-
-//    void collisionY()
-//    {
-
-//        for (int j = rect.left/32; j<(rect.left+rect.width)/33; j++)
-//            for (int i = rect.top/32 ; i<(rect.top+rect.height)/33; i++)
-//                if (TileMap[i][j]=='B')
-//                {
-//                    if (dy>0)
-//                    { rect.top =  i*33 - rect.height;  dy*=-1;}
-//                    else if (dy<0)
-//                    { rect.top =  i*33 + 35;  dy*=-1; }
-//                }
-//    }
 
     Direction randomDirection()
     {
