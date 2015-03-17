@@ -238,8 +238,6 @@ public:
         }
 
         sprite.setTextureRect(IntRect(33*frame, 198+d*33, 32,32));
-
-        sprite.setTextureRect(IntRect(33*frame,198+d*33, 32,32));
     }
 
     void collisionX()
