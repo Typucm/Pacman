@@ -292,9 +292,11 @@ int main()
     //float currentFrame=0;
 
     Pacman t(p);
-    Enemy enemy;
+    Enemy enemy1;
+    Enemy enemy2;
 
-    enemy.set(p,200,130);
+    enemy1.set(p,200,130);
+    enemy2.set(p,200,330);
 
     Clock clock;
 
@@ -326,13 +328,47 @@ int main()
             t.dy=0.04;
 
         t.update(time);
-        enemy.update(time);
+        enemy1.update(time);
+        enemy2.update(time);
 
-        if  (t.rect.intersects( enemy.rect ) )
+        if  (t.rect.intersects( enemy1.rect ) )
         {
-            if (enemy.life) {
+            if (enemy1.life) {
                 if (t.dy>0) {
-                    enemy.dx=0; t.dy=-0.2; enemy.life=false;
+                    enemy1.dx=0; t.dy=-0.2; enemy1.life=false;
+                }
+                else {
+                    RenderWindow window(VideoMode(275, 183), "Lose!");
+
+                    Texture m;
+                    m.loadFromFile("index.jpg");
+                    Sprite b;
+                    b.setTexture(m);
+                    b.setTextureRect(IntRect(0,0,275,183));
+                    b.setPosition(0,0);
+
+                    while (window.isOpen())
+                    {
+                        Event event;
+                        while (window.pollEvent(event))
+                        {
+                            if (event.type == Event::Closed)
+                                window.close();
+                        }
+
+                        window.clear();
+                        window.draw(b);
+                        window.display();
+                    }
+                }
+            }
+        }
+
+        if  (t.rect.intersects( enemy2.rect ) )
+        {
+            if (enemy2.life) {
+                if (t.dy>0) {
+                    enemy2.dx=0; t.dy=-0.2; enemy2.life=false;
                 }
                 else {
                     RenderWindow window(VideoMode(275, 183), "Lose!");
@@ -380,7 +416,8 @@ int main()
             }
 
         window.draw(t.sprite);
-        window.draw(enemy.sprite);
+        window.draw(enemy1.sprite);
+        window.draw(enemy2.sprite);
         window.display();
     }
 
