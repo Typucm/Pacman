@@ -191,8 +191,8 @@ private:
 
     bool isValidPosition(const Position& pos)
     {
-        int i = pos.x/33;
-        int j = pos.y/33;
+        int i = pos.y/33;
+        int j = pos.x/33;
 
         return TileMap[i][j] != 'B'
                 && TileMap[i+1][j] != 'B'
