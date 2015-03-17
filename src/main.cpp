@@ -2,6 +2,7 @@
 #include <ctime>
 #include <cmath>
 #include <iostream>
+#include <cassert>
 
 using namespace sf;
 
@@ -147,6 +148,8 @@ public:
 
     void set(Texture &image, int x, int y)
     {
+        srand(std::time(0));
+
         sprite.setTexture(image);
         rect = FloatRect(x,y,32,32);
 
@@ -155,9 +158,7 @@ public:
         currentFrame = 0;
         life=true;
 
-        isHorizontal = true;
-
-        srand(std::time(0));
+        dir = randomDirection();
     }
 
     void update(float time)
@@ -177,8 +178,8 @@ public:
         double const dl = 0.04;
         double len = time*dl;
 
-        if (rand()%10000 == 0)
-           dir = static_cast<Direction>(rand()%4);
+        if (rand()%100 == 0)
+            dir = randomDirection();
 
         switch (dir) {
         case Left: return {pos.x-len, pos.y};
@@ -187,7 +188,7 @@ public:
         case Up: return {pos.x, pos.y-len};
         }
 
-        return {pos.x, pos.y};
+        assert(false);
     }
 
     Direction moveDirection(const Position& oldPos, const Position& pos)
@@ -268,7 +269,11 @@ public:
                 }
     }
 
-
+private:
+    Direction randomDirection()
+    {
+        return static_cast<Direction>(rand()%4);
+    }
 };
 
 int main()
@@ -297,7 +302,7 @@ int main()
 
         time = time/500;
 
-        if (time>20) time = 20;
+        if (time>1000) time = 1000;
         Event event;
         while (window.pollEvent(event))
         {
