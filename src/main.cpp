@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 #include <cassert>
+#include <vector>
+#include <algorithm>
 
 using namespace sf;
 
@@ -158,7 +160,7 @@ public:
         currentFrame = 0;
         life=true;
 
-        dir = randomDirection();
+        dir = otherRandomDirection(None);
     }
 
     void update(float time)
@@ -203,13 +205,13 @@ private:
     Position nextPosition(const Position& pos, float time)
     {
         if (rand()%100 == 0)
-            dir = randomDirection();
+            dir = otherRandomDirection(dir);
 
         for (int trial=0; trial<5; ++trial) {
             Position wantPos = positionByDir(pos, time);
             if (isValidPosition(wantPos))
                 return wantPos;
-            dir = randomDirection();
+            dir = otherRandomDirection(dir);
         }
 
         dir = None;
@@ -259,11 +261,26 @@ private:
         sprite.setTextureRect(IntRect(33*frame, 198+d*33, 32,32));
     }
 
-    Direction randomDirection()
+    Direction otherRandomDirection(Direction dir)
     {
-        return static_cast<Direction>(rand()%5);
+        auto dirs = directions;
+        auto iterDir = std::find(dirs.begin(), dirs.end(), dir);
+        dirs.erase(iterDir);
+
+        if (rand()%5==0)
+            return dirs[rand()%dirs.size()];
+
+        auto iterNone = std::find(dirs.begin(), dirs.end(), None);
+        if (iterNone != dirs.end())
+            dirs.erase(iterNone);
+
+        return dirs[rand()%dirs.size()];
     }
+
+    static std::vector<Direction> directions;
 };
+
+std::vector<Enemy::Direction> Enemy::directions = {Enemy::None, Enemy::Left, Enemy::Right, Enemy::Up, Enemy::Down};
 
 int main()
 {
