@@ -142,7 +142,7 @@ public:
 
     bool isHorizontal;
 
-    enum Direction {Left, Right, Up, Down};
+    enum Direction {None, Left, Right, Up, Down};
 
     Direction dir;
 
@@ -174,13 +174,10 @@ public:
     }
 
 private:
-    Position nextPosition(const Position& pos, float time)
+    Position positionByDir(const Position& pos, float time)
     {
-        double const dl = 0.04;
+        static double const dl = 0.04;
         double len = time*dl;
-
-        if (rand()%100 == 0)
-            dir = randomDirection();
 
         switch (dir) {
         case Left: return {pos.x-len, pos.y};
@@ -189,7 +186,28 @@ private:
         case Up: return {pos.x, pos.y-len};
         }
 
-        assert(false);
+        return {pos.x, pos.y};
+    }
+
+    bool isValidPosition(const Position& pos)
+    {
+        return true;
+    }
+
+    Position nextPosition(const Position& pos, float time)
+    {
+        if (rand()%100 == 0)
+            dir = randomDirection();
+
+        for (int trial=0; trial<5; ++trial) {
+            Position wantPos = positionByDir(pos, time);
+            if (isValidPosition(wantPos))
+                return wantPos;
+            dir = randomDirection();
+        }
+
+        dir = None;
+        return pos;
     }
 
     Direction moveDirection(const Position& oldPos, const Position& pos)
@@ -225,54 +243,47 @@ private:
 
         int d;
         switch (dir) {
-        case Left:
-            d = 0;
-            break;
-        case Down:
-            d = 1;
-            break;
-        case Right:
-            d = 2;
-            break;
-        case Up:
-            d = 3;
-            break;
+        case None: d = 0; break;
+        case Left: d = 0; break;
+        case Down: d = 1; break;
+        case Right: d = 2; break;
+        case Up: d = 3; break;
         }
 
         sprite.setTextureRect(IntRect(33*frame, 198+d*33, 32,32));
     }
 
-    void collisionX()
-    {
+//    void collisionX()
+//    {
 
-        for (int i = rect.top/32 ; i<(rect.top+rect.height)/33; i++)
-            for (int j = rect.left/32; j<(rect.left+rect.width)/33; j++)
-                if (TileMap[i][j]=='B')
-                {
-                    if (dx>0)
-                    { rect.left =  j*33 - rect.width;dx*=-1; }
-                    else if (dx<0)
-                    { rect.left =  j*33 + 32.9;  dx*=-1; }
-                }
-    }
+//        for (int i = rect.top/32 ; i<(rect.top+rect.height)/33; i++)
+//            for (int j = rect.left/32; j<(rect.left+rect.width)/33; j++)
+//                if (TileMap[i][j]=='B')
+//                {
+//                    if (dx>0)
+//                    { rect.left =  j*33 - rect.width;dx*=-1; }
+//                    else if (dx<0)
+//                    { rect.left =  j*33 + 32.9;  dx*=-1; }
+//                }
+//    }
 
-    void collisionY()
-    {
+//    void collisionY()
+//    {
 
-        for (int j = rect.left/32; j<(rect.left+rect.width)/33; j++)
-            for (int i = rect.top/32 ; i<(rect.top+rect.height)/33; i++)
-                if (TileMap[i][j]=='B')
-                {
-                    if (dy>0)
-                    { rect.top =  i*33 - rect.height;  dy*=-1;}
-                    else if (dy<0)
-                    { rect.top =  i*33 + 35;  dy*=-1; }
-                }
-    }
+//        for (int j = rect.left/32; j<(rect.left+rect.width)/33; j++)
+//            for (int i = rect.top/32 ; i<(rect.top+rect.height)/33; i++)
+//                if (TileMap[i][j]=='B')
+//                {
+//                    if (dy>0)
+//                    { rect.top =  i*33 - rect.height;  dy*=-1;}
+//                    else if (dy<0)
+//                    { rect.top =  i*33 + 35;  dy*=-1; }
+//                }
+//    }
 
     Direction randomDirection()
     {
-        return static_cast<Direction>(rand()%4);
+        return static_cast<Direction>(rand()%5);
     }
 };
 
