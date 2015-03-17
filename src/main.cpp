@@ -173,6 +173,7 @@ public:
         setupSprite(dir, frame);
     }
 
+private:
     Position nextPosition(const Position& pos, float time)
     {
         double const dl = 0.04;
@@ -269,7 +270,6 @@ public:
                 }
     }
 
-private:
     Direction randomDirection()
     {
         return static_cast<Direction>(rand()%4);
