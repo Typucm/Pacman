@@ -160,28 +160,6 @@ public:
         srand(std::time(0));
     }
 
-//    void update(float time)
-//    {
-//        collisionY();
-//        collisionX();
-
-//        currentFrame += time * 0.003;
-//        if (currentFrame > 3) currentFrame -= 3;
-
-//        sprite.setTextureRect(IntRect(33*int(currentFrame),198, 32,32));
-//        if (!life) sprite.setTextureRect(IntRect(20, 280, 33,33));
-
-//        if (rand()%10000 == 0)
-//            isHorizontal = !isHorizontal;
-
-//        if (isHorizontal)
-//            rect.left += dx * time;
-//        else
-//            rect.top += dy * time;
-
-//        sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
-//    }
-
     void update(float time)
     {
         Position oldPos = {rect.left, rect.top};
