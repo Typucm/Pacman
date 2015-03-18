@@ -296,7 +296,10 @@ int main()
     Enemy enemy2;
 
     enemy1.set(p,200,130);
-    enemy2.set(p,200,330);
+
+    Texture redEnemyTexture;
+    redEnemyTexture.loadFromFile("red_packman.png");
+    enemy2.set(redEnemyTexture,200,330);
 
     Clock clock;
 
